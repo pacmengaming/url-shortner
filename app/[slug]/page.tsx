@@ -1,13 +1,11 @@
-"use server";
 import { redirectURL, visitCounter } from '@/lib/actions/urls';
 import { redirect } from 'next/navigation';
 
-type Params = Promise<{ slug: string }>
+type Params = Promise<{ slug: string }>;
 
-export default async function RedirectURLPage(props: { params: Params }) {
-    const params = await props.params;
-    const { slug } = params;
-    
+export default async function RedirectURLPage({ params }: { params: Params }) {
+    const { slug } = await params;
+
     const urlData = await redirectURL(slug);
 
     if (urlData && urlData.originalUrl) {
