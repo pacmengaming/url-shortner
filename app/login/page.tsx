@@ -27,14 +27,19 @@ export default function LoginPage() {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
+        <div className ="absolute top-4">
+        <h1 className="text-2xl font-bold mb-6">URL-Shortner</h1>
+        </div>
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-center">Log In or Sign Up</CardTitle>
+        <CardTitle>
+            <div className="text-center">Log In or Sign Up</div>
+            </CardTitle>
         </CardHeader>
         <CardContent>
           {message && (
-            <Alert variant={message.type === 'error' ? 'destructive' : 'success'} className="mb-4">
-              <AlertDescription>{message.text}</AlertDescription>
+            <Alert variant={message.type === 'error' ? 'destructive' : undefined} className="mb-4">
+            <AlertDescription>{message.text}</AlertDescription>
             </Alert>
           )}
           <form onSubmit={handleSubmit} className="space-y-4">

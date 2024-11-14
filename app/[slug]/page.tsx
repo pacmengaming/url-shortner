@@ -3,7 +3,7 @@ import { redirectURL, visitCounter } from '@/lib/actions/urls';
 import { redirect } from 'next/navigation';
 
 interface PageProps {
-    params: { slug: string };
+    params: {slug: string};
 }
 
 export default async function RedirectURLPage({ params }: PageProps) {

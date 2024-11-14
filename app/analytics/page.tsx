@@ -32,15 +32,16 @@ export default function AnalyticsPage() {
 
         const fetchLinks = async () => {
             const supabase = createClient();
-            const { data: authData, error: authError } = await supabase.auth.getUser();
-
-            if (authError || !authData || !authData.user) {
+            const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+            
+            if (sessionError || !sessionData || !sessionData.session) {
                 console.error("User is not authenticated");
                 router.push('/login');
                 return;
             }
+            
+            const userId = sessionData.session.user.id;
 
-            const userId = authData.user.id;
 
             try {
                 const data = await getAllLinksWithClicks(userId);

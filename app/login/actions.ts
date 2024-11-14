@@ -3,7 +3,6 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
-import { headers } from 'next/headers';
 
 export async function login(formData: FormData) {
     const supabase = await createClient();
@@ -14,22 +13,29 @@ export async function login(formData: FormData) {
     const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
 
     if (signInError) {
+        console.log(signInError)
         if (signInError.message.includes('Invalid login credentials')) {
             const { error: signUpError } = await supabase.auth.signUp({ email, password });
 
             if (signUpError) {
-                return { error: signUpError.message };
+                console.log(signUpError)
+                if (signUpError.message.includes('already registered')) {
+                    return { error: 'This email is already registered. Please log in or reset your password.' };
+                } else {
+                    return { error: signUpError.message };
+                }
             } else {
                 return { success: 'Account created successfully! You can now log in.' };
             }
         } else {
-            return { error: 'Wrong password. Please try again.' };
+            return { error: 'Incorrect password. Please try again.' };
         }
     }
 
     redirect('/dashboard');
     return null;
 }
+
 
 export async function signup(formData: FormData) {
   const supabase = await createClient();

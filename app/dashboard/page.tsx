@@ -39,7 +39,7 @@ export default function Dashboard() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="absolute top-4 right-4 flex space-x-2">
         <Link href="/analytics">
-          <Button variant="secondary" className="hover:underline">
+          <Button variant="default" className="hover:underline">
             Analytics
           </Button>
         </Link>
@@ -50,7 +50,9 @@ export default function Dashboard() {
 
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-center">URL Shortner</CardTitle>
+        <CardTitle>
+          <div className="text-center">URL Shortener</div>
+          </CardTitle>
         </CardHeader>
         <CardContent>
           {error && (

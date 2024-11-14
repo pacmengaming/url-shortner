@@ -1,3 +1,3 @@
 export default function ErrorPage() {
-    return <p>ERROR!</p>
+    return <p className = "text-red">ERROR!</p>
   }
