@@ -8,6 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { createClient } from '@/utils/supabase/client';
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 type LinkData = {
     slug: string;
@@ -18,7 +20,9 @@ type LinkData = {
 export default function AnalyticsPage() {
     const [links, setLinks] = useState<LinkData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isDarkMode, setIsDarkMode] = useState(false);
     const router = useRouter();
+    
 
     useEffect(() => {
         const fetchLinks = async () => {
@@ -49,16 +53,21 @@ export default function AnalyticsPage() {
     if (isLoading) return <p>Loading...</p>;
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+        <div className={`flex flex-col items-center justify-center min-h-screen p-4 ${isDarkMode ? 'bg-black text-white' : 'bg-gray-100 text-black'}`}>
             <div className="absolute top-4 right-4">
                 <Link href="/dashboard">
-                    <Button variant="secondary">Dashboard</Button>
+                    <Button variant="default">Dashboard</Button>
                 </Link>
+            </div>
+
+            <div className="absolute top-4 left-4 flex items-center space-x-2">
+                <Switch id="dark-mode-switch" checked={isDarkMode} onCheckedChange={setIsDarkMode} />
+                <Label htmlFor="dark-mode-switch">Dark Mode</Label>
             </div>
 
             <h1 className="text-2xl font-bold mb-6">Analytics</h1>
 
-            <Card className="w-full max-w-2xl">
+            <Card className={`w-full max-w-2xl ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'}`}>
                 <CardHeader>
                     <CardTitle>Link Analytics</CardTitle>
                 </CardHeader>
@@ -70,16 +79,16 @@ export default function AnalyticsPage() {
                             {links.map((link) => (
                                 <li
                                     key={link.slug}
-                                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg shadow-sm">
+                                    className={`flex items-center justify-between p-4 border rounded-lg shadow-lg ${isDarkMode ? 'border-gray-700 bg-gray-700 text-white' : 'border-gray-200 bg-white text-black'}`}>
                                     <div className="flex-1">
-                                        <p className="text-gray-800 font-medium">{link.originalUrl}</p>
-                                        <p className="text-gray-500 text-sm">Slug: {link.slug}</p>
+                                        <p className="font-medium">{link.originalUrl}</p>
+                                        <p className="text-sm">Slug: {link.slug}</p>
                                     </div>
                                     <Badge
-                                    variant="default"
-                                    className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-600 text-white font-semibold">
+                                        variant="default"
+                                        className={`w-12 h-12 flex items-center justify-center rounded-full font-semibold ${isDarkMode ? 'bg-white text-black' : 'bg-blue-600 text-white'}`}>
                                         {link.visits || 0}
-                                        </Badge>
+                                    </Badge>
                                 </li>
                             ))}
                         </ul>
