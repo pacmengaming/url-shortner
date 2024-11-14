@@ -2,12 +2,12 @@
 import { redirectURL, visitCounter } from '@/lib/actions/urls';
 import { redirect } from 'next/navigation';
 
-interface PageProps {
-    params: {slug: string};
-}
+type Params = Promise<{ slug: string }>
 
-export default async function RedirectURLPage({ params }: PageProps) {
-    const { slug } = params;  
+export default async function RedirectURLPage(props: { params: Params }) {
+    const params = await props.params;
+    const { slug } = params;
+    
     const urlData = await redirectURL(slug);
 
     if (urlData && urlData.originalUrl) {
