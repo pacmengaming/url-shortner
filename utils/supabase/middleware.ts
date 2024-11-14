@@ -45,5 +45,5 @@ export async function updateSession(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/dashboard', '/analytics', '/login'],
+  matcher: ['/', '/dashboard', '/analytics', '/login', ''],
 };
