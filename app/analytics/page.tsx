@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { createClient } from '@/utils/supabase/client';
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
 
 type LinkData = {
     slug: string;
@@ -21,10 +22,14 @@ export default function AnalyticsPage() {
     const [links, setLinks] = useState<LinkData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isDarkMode, setIsDarkMode] = useState(false);
+    const [progress, setProgress] = useState(0); 
     const router = useRouter();
     
-
     useEffect(() => {
+        const progressTimer = setInterval(() => {
+            setProgress(prev => (prev < 66 ? prev + 33 : 66));
+        }, 200);
+
         const fetchLinks = async () => {
             const supabase = createClient();
             const { data: authData, error: authError } = await supabase.auth.getUser();
@@ -45,12 +50,23 @@ export default function AnalyticsPage() {
             }
 
             setIsLoading(false);
+            clearInterval(progressTimer); 
+            setProgress(100);
         };
 
         fetchLinks();
+
+        return () => clearInterval(progressTimer); 
     }, [router]);
 
-    if (isLoading) return <p>Loading...</p>;
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-screen">
+                <p>Loading...</p>
+                <Progress value={progress} className="w-[60%]" />
+            </div>
+        );
+    }
 
     return (
         <div className={`flex flex-col items-center justify-center min-h-screen p-4 ${isDarkMode ? 'bg-black text-white' : 'bg-gray-100 text-black'}`}>
