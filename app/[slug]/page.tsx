@@ -1,18 +1,16 @@
 import { redirectURL, visitCounter } from '@/lib/actions/urls';
+import { notFound } from 'next/navigation';
 import { redirect } from 'next/navigation';
 
-type Params = Promise<{ slug: string[] }>;
-
-export default async function RedirectURLPage({ params }: { params: Params }) {
-    const { slug } = await params;
-
-    const slugValue = slug[0];
+export default async function RedirectURLPage({ params }: { params: { slug: string } }) {
+    const slugValue = params.slug;
 
     const urlData = await redirectURL(slugValue);
 
-    if (urlData && urlData.originalUrl) {
+    if (urlData?.originalUrl) {
         await visitCounter(urlData.urlId);
         redirect(urlData.originalUrl);
-
+    } else {
+        notFound();
     }
 }
