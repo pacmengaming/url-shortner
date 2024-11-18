@@ -1,20 +1,24 @@
 import { redirectURL, visitCounter } from '@/lib/actions/urls';
-import { notFound } from 'next/navigation';
-import { redirect } from 'next/navigation';
-import { useParams } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
-export default async function RedirectURLPage() {
-  const { slug } = useParams();
+export default async function RedirectURLPage({params}: {params: {slug: string}}) {
+  const slugValue = params.slug;
 
-  if (!slug || typeof slug !== 'string') {
+  try {
+    const urlData = await redirectURL(slugValue);
+
+    if (urlData?.originalUrl) {
+      await visitCounter(urlData.urlId);
+      redirect(urlData.originalUrl);
+    } 
+    
+    else {
+      notFound();
+    }
+  } 
+  
+  catch (error) {
+    console.error('Error fetching URL data:', error);
     notFound();
   }
-  const urlData = await redirectURL(slug);
-
-  if (urlData?.originalUrl) {
-    await visitCounter(urlData.urlId);
-    redirect(urlData.originalUrl);
-  }
-
-  notFound();
 }
