@@ -1,5 +1,5 @@
 import { redirectURL, visitCounter } from '@/lib/actions/urls';
-import { notFound, redirect } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 
 type Params = Promise<{ slug: string }>;
 
@@ -7,12 +7,19 @@ export default async function RedirectURLPage({ params }: { params: Params }) {
   const resolvedParams = await params;
   const slugValue = resolvedParams.slug;
 
+  console.log('Slug:', slugValue); //debug
+
   try {
     const urlData = await redirectURL(slugValue);
 
+    console.log('URL Data:', urlData); //debug
+
+
     if (urlData?.originalUrl) {
+
+    console.log('Redirecting to:', urlData.originalUrl); //debug
       await visitCounter(urlData.urlId);
-      redirect(urlData.originalUrl);
+      permanentRedirect(urlData.originalUrl);
     } 
     
     else {
@@ -21,7 +28,7 @@ export default async function RedirectURLPage({ params }: { params: Params }) {
   } 
   
   catch (error) {
-    console.error('Error fetching URL data:', error);
+    console.error('Error redirecting:', error);
     notFound();
   }
 }
