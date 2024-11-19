@@ -9,26 +9,18 @@ export default async function RedirectURLPage({ params }: { params: Params }) {
 
   console.log('Slug:', slugValue); //debug
 
-  try {
+
     const urlData = await redirectURL(slugValue);
 
     console.log('URL Data:', urlData); //debug
 
 
     if (urlData?.originalUrl) {
-
     console.log('Redirecting to:', urlData.originalUrl); //debug
       await visitCounter(urlData.urlId);
       permanentRedirect(urlData.originalUrl);
     } 
     
-    else {
-      notFound();
-    }
-  } 
-  
-  catch (error) {
-    console.error('Error redirecting:', error);
     notFound();
-  }
+   
 }
