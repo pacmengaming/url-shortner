@@ -9,8 +9,8 @@ export async function shortenURL(url: string) {
     const { data: authData, error: authError } = await (await supabase).auth.getUser();
 
     if (authError || !authData || !authData.user) {
-        console.error("Error retrieving authenticated user:", authError?.message || "No user found");
-        throw new Error("User must be authenticated to create a shortened URL.");
+        console.error("Error getting authenticated user:", authError?.message || "No user found");
+        throw new Error("User must be authenticated to shorten URL.");
     }
 
     const userId = authData.user.id; 
@@ -28,7 +28,7 @@ export async function shortenURL(url: string) {
         .select();
 
     if (urlError || !urlData || !urlData[0]) {
-        console.error("Error inserting data into urls:", urlError?.message || "No URL data returned");
+        console.error("Error adding data into urls:", urlError?.message || "No URL data returned");
         throw new Error("Failed to create shortened URL");
     }
 
@@ -44,8 +44,8 @@ export async function shortenURL(url: string) {
         ]);
 
     if (clickError) {
-        console.error("Error inserting initial data into clicks table:", clickError.message);
-        throw new Error("Failed to initialize visit count for the new URL");
+        console.error("Error adding initial data into clicks table:", clickError.message);
+        throw new Error("Failed to create visit counter for the new URL");
     }
 
     console.log("Shortened URL slug:", generatedSlug);
@@ -79,7 +79,7 @@ export async function visitCounter(urlId: Int8Array){
     .single();
 
     if (error || !data) {
-        console.error("Error fetching visits count:", error);
+        console.error("Error getting visits count:", error);
         return;
     }
 
@@ -94,7 +94,7 @@ export async function visitCounter(urlId: Int8Array){
     if (updateError) {
         console.error("Error updating visit count:", updateError);
     } else {
-        console.log(`Visit count incremented for URL ID: ${urlId}`);
+        console.log(`Visit count increased for URL ID: ${urlId}`);
     }
 
 }
@@ -113,7 +113,7 @@ export async function getAllLinksWithClicks(userId: string) {
         .eq('user_id', userId);
 
     if (error) {
-        console.error("Error fetching user's links with visits:", error.message);
+        console.error("Error retrieving user's links with visits:", error.message);
         return [];
     }
 

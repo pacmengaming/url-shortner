@@ -30,7 +30,7 @@ export default function Dashboard() {
       const generatedSlug = await shortenURL(url);
       setSlug(generatedSlug);
     } catch (error) {
-      setError("Error creating shortened URL.");
+      setError("Error creating shortened URL");
       console.error("Error creating shortened URL:", error);
     }
   };

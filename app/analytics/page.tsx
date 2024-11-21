@@ -47,7 +47,7 @@ export default function AnalyticsPage() {
                 const data = await getAllLinksWithClicks(userId);
                 setLinks(data);
             } catch (fetchError) {
-                console.error("Error fetching user's links:", fetchError);
+                console.error("Error getting user's links:", fetchError);
             }
 
             setIsLoading(false);
